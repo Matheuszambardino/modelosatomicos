@@ -1,0 +1,1255 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jornada Atômica - Modelos Atômicos</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    
+    .font-orbitron { font-family: 'Orbitron', sans-serif; }
+    .font-nunito { font-family: 'Nunito', sans-serif; }
+    
+    @keyframes orbit {
+      from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color); }
+      50% { box-shadow: 0 0 30px var(--glow-color), 0 0 60px var(--glow-color); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes wiggle {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      25% { transform: translateX(2px) translateY(-1px); }
+      50% { transform: translateX(-1px) translateY(2px); }
+      75% { transform: translateX(-2px) translateY(-1px); }
+    }
+    
+    .electron {
+      animation: orbit var(--orbit-time) linear infinite;
+      --orbit-radius: 40px;
+    }
+    
+    .nucleus-glow {
+      --glow-color: #f59e0b;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .particle-solid {
+      animation: wiggle 0.3s ease-in-out infinite;
+    }
+    
+    .particle-liquid {
+      animation: wiggle 1s ease-in-out infinite;
+    }
+    
+    .timeline-card {
+      transition: all 0.3s ease;
+    }
+    
+    .timeline-card:hover {
+      transform: scale(1.02);
+    }
+    
+    .tab-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .quiz-option {
+      transition: all 0.2s ease;
+    }
+    
+    .quiz-option:hover:not(.selected):not(.correct):not(.incorrect) {
+      background: #e0e7ff;
+      transform: translateX(5px);
+    }
+    
+    .quiz-option.selected {
+      background: #ddd6fe;
+      border-color: #8b5cf6;
+    }
+    
+    .quiz-option.correct {
+      background: #d1fae5;
+      border-color: #10b981;
+    }
+    
+    .quiz-option.incorrect {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+    
+    .state-particle {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      position: absolute;
+      transition: all 0.5s ease;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .card-glow {
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+    }
+    
+    .card-glow:hover {
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.25);
+    }
+    
+    .progress-bar {
+      transition: width 0.5s ease;
+    }
+    
+    .scroll-smooth {
+      scroll-behavior: smooth;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-nunito bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-auto scroll-smooth">
+  <div id="app" class="w-full min-h-full"><!-- Hero Section -->
+   <header class="relative py-12 px-4 md:px-8 text-center overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+     <div class="absolute top-10 left-10 w-4 h-4 bg-cyan-400 rounded-full animate-ping"></div>
+     <div class="absolute top-20 right-20 w-3 h-3 bg-pink-400 rounded-full animate-ping" style="animation-delay: 0.5s"></div>
+     <div class="absolute bottom-20 left-1/4 w-2 h-2 bg-yellow-400 rounded-full animate-ping" style="animation-delay: 1s"></div>
+    </div>
+    <div class="relative z-10">
+     <h1 id="mainTitle" class="font-orbitron text-4xl md:text-6xl lg:text-7xl font-black gradient-text mb-4 float-animation">🔬 JORNADA ATÔMICA</h1>
+     <p id="subtitle" class="text-xl md:text-2xl text-purple-200 font-semibold mb-6">Dos Filósofos Gregos ao Modelo Atual</p>
+     <p class="text-lg text-gray-300 max-w-3xl mx-auto">Descubra como a humanidade desvendou os mistérios da menor partícula da matéria!</p>
+    </div><!-- Animated Atom -->
+    <div class="relative w-32 h-32 mx-auto mt-8">
+     <div class="absolute inset-0 flex items-center justify-center">
+      <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full nucleus-glow"></div>
+     </div>
+     <div class="absolute inset-0">
+      <div class="electron absolute w-4 h-4 bg-cyan-400 rounded-full" style="--orbit-radius: 50px; --orbit-time: 2s; top: 50%; left: 50%; margin: -8px;"></div>
+     </div>
+     <div class="absolute inset-0" style="transform: rotateX(60deg);">
+      <div class="electron absolute w-3 h-3 bg-pink-400 rounded-full" style="--orbit-radius: 45px; --orbit-time: 1.5s; top: 50%; left: 50%; margin: -6px;"></div>
+     </div>
+     <div class="absolute inset-0" style="transform: rotateY(60deg);">
+      <div class="electron absolute w-3 h-3 bg-green-400 rounded-full" style="--orbit-radius: 55px; --orbit-time: 2.5s; top: 50%; left: 50%; margin: -6px;"></div>
+     </div>
+    </div>
+   </header><!-- Navigation Tabs -->
+   <nav class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm py-4 px-4 border-b border-purple-500/30">
+    <div class="flex flex-wrap justify-center gap-2 md:gap-4 max-w-5xl mx-auto"><button onclick="showSection('intro')" class="tab-btn active px-4 py-2 md:px-6 md:py-3 rounded-full font-bold text-sm md:text-base bg-slate-700 hover:bg-slate-600" data-section="intro"> 📚 Introdução </button> <button onclick="showSection('timeline')" class="tab-btn px-4 py-2 md:px-6 md:py-3 rounded-full font-bold text-sm md:text-base bg-slate-700 hover:bg-slate-600" data-section="timeline"> ⏰ Linha do Tempo </button> <button onclick="showSection('models')" class="tab-btn px-4 py-2 md:px-6 md:py-3 rounded-full font-bold text-sm md:text-base bg-slate-700 hover:bg-slate-600" data-section="models"> 🔬 Modelos </button> <button onclick="showSection('states')" class="tab-btn px-4 py-2 md:px-6 md:py-3 rounded-full font-bold text-sm md:text-base bg-slate-700 hover:bg-slate-600" data-section="states"> 🌡️ Estados </button> <button onclick="showSection('quiz')" class="tab-btn px-4 py-2 md:px-6 md:py-3 rounded-full font-bold text-sm md:text-base bg-slate-700 hover:bg-slate-600" data-section="quiz"> 📝 Exercícios </button> <button onclick="showSection('paulista')" class="tab-btn px-4 py-2 md:px-6 md:py-3 rounded-full font-bold text-sm md:text-base bg-slate-700 hover:bg-slate-600" data-section="paulista"> 🏆 Prova Paulista </button>
+    </div>
+   </nav>
+   <main class="px-4 md:px-8 py-8 max-w-6xl mx-auto"><!-- SECTION: Introdução -->
+    <section id="intro" class="section-content">
+     <div class="bg-slate-800/50 rounded-3xl p-6 md:p-10 card-glow mb-8">
+      <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-cyan-400 mb-6 flex items-center gap-3"><span class="text-4xl">🤔</span> O que é um Átomo?</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+       <div>
+        <p class="text-lg md:text-xl leading-relaxed text-gray-200 mb-6"><strong class="text-yellow-400">Átomo</strong> vem do grego <em>"átomos"</em>, que significa <strong class="text-pink-400">"indivisível"</strong>. Os antigos gregos acreditavam que a matéria poderia ser dividida até chegar em uma partícula que não poderia mais ser quebrada.</p>
+        <div class="bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-2xl p-6 border border-purple-400/30">
+         <h3 class="font-bold text-xl text-purple-300 mb-3">💡 Você Sabia?</h3>
+         <p class="text-gray-200">Se um átomo fosse do tamanho de um estádio de futebol, o núcleo seria do tamanho de uma ervilha no centro do campo! O resto é praticamente <strong>espaço vazio</strong> onde os elétrons se movem.</p>
+        </div>
+       </div>
+       <div class="flex flex-col items-center justify-center">
+        <div class="relative w-48 h-48 md:w-64 md:h-64">
+         <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-full nucleus-glow flex items-center justify-center"><span class="font-bold text-white text-xs">Núcleo</span>
+          </div>
+         </div>
+         <div class="absolute inset-0 border-2 border-dashed border-cyan-400/50 rounded-full"></div>
+         <div class="absolute inset-4 border-2 border-dashed border-pink-400/50 rounded-full"></div>
+         <div class="absolute inset-8 border-2 border-dashed border-yellow-400/50 rounded-full"></div>
+         <div class="electron absolute w-4 h-4 bg-cyan-400 rounded-full shadow-lg shadow-cyan-400/50" style="--orbit-radius: 95px; --orbit-time: 3s; top: 50%; left: 50%; margin: -8px;"></div>
+         <div class="electron absolute w-4 h-4 bg-pink-400 rounded-full shadow-lg shadow-pink-400/50" style="--orbit-radius: 75px; --orbit-time: 2s; top: 50%; left: 50%; margin: -8px;"></div>
+         <div class="electron absolute w-4 h-4 bg-yellow-400 rounded-full shadow-lg shadow-yellow-400/50" style="--orbit-radius: 55px; --orbit-time: 1.5s; top: 50%; left: 50%; margin: -8px;"></div>
+        </div>
+        <p class="text-center text-gray-400 mt-4 text-sm">Representação artística de um átomo</p>
+       </div>
+      </div>
+     </div>
+     <div class="bg-slate-800/50 rounded-3xl p-6 md:p-10 card-glow">
+      <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-green-400 mb-6 flex items-center gap-3"><span class="text-4xl">🔬</span> Por que estudar Modelos Atômicos?</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+       <div class="bg-gradient-to-br from-blue-600/20 to-cyan-600/20 rounded-2xl p-6 border border-blue-400/30 hover:border-blue-400/60 transition-all">
+        <div class="text-4xl mb-4">
+         🧪
+        </div>
+        <h3 class="font-bold text-xl text-blue-300 mb-2">Ciência é Processo</h3>
+        <p class="text-gray-300">Os modelos mostram como a ciência evolui: cada descoberta corrige e melhora as anteriores!</p>
+       </div>
+       <div class="bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl p-6 border border-green-400/30 hover:border-green-400/60 transition-all">
+        <div class="text-4xl mb-4">
+         🌍
+        </div>
+        <h3 class="font-bold text-xl text-green-300 mb-2">Entender o Mundo</h3>
+        <p class="text-gray-300">Tudo ao nosso redor é feito de átomos. Entendê-los é entender a matéria!</p>
+       </div>
+       <div class="bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl p-6 border border-purple-400/30 hover:border-purple-400/60 transition-all">
+        <div class="text-4xl mb-4">
+         💻
+        </div>
+        <h3 class="font-bold text-xl text-purple-300 mb-2">Tecnologia</h3>
+        <p class="text-gray-300">Celulares, medicamentos, energia nuclear... Tudo depende do conhecimento atômico!</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- SECTION: Linha do Tempo -->
+    <section id="timeline" class="section-content hidden">
+     <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-10">⏰ A História do Átomo</h2>
+     <div class="relative"><!-- Timeline Line -->
+      <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-500 via-purple-500 to-pink-500 transform md:-translate-x-1/2"></div><!-- Timeline Items -->
+      <div class="space-y-8"><!-- 450 a.C. - Demócrito -->
+       <div class="timeline-card relative flex flex-col md:flex-row items-start md:items-center">
+        <div class="md:w-1/2 md:pr-12 md:text-right pl-12 md:pl-0">
+         <div class="bg-slate-800 rounded-2xl p-6 card-glow border-l-4 md:border-l-0 md:border-r-4 border-cyan-500"><span class="inline-block px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm font-bold mb-3">450 a.C.</span>
+          <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-2">Demócrito &amp; Leucipo</h3>
+          <p class="text-gray-300 mb-4">Filósofos gregos que propuseram pela primeira vez a ideia de <strong class="text-yellow-400">átomo</strong> - partículas indivisíveis que formam toda a matéria. Era um modelo <strong>filosófico</strong>, baseado em raciocínio, não em experimentos.</p>
+          <div class="flex items-center gap-2 text-sm text-gray-400"><span>📖</span> Modelo Filosófico
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-0 md:left-1/2 w-8 h-8 bg-cyan-500 rounded-full transform md:-translate-x-1/2 flex items-center justify-center text-white font-bold">
+         1
+        </div>
+       </div><!-- 1803 - Dalton -->
+       <div class="timeline-card relative flex flex-col md:flex-row items-start md:items-center">
+        <div class="md:w-1/2 md:order-2 md:pl-12 pl-12">
+         <div class="bg-slate-800 rounded-2xl p-6 card-glow border-l-4 border-yellow-500"><span class="inline-block px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-sm font-bold mb-3">1803</span>
+          <h3 class="font-orbitron text-2xl font-bold text-yellow-400 mb-2">John Dalton</h3>
+          <p class="text-gray-300 mb-4">Primeiro modelo <strong class="text-green-400">científico</strong>! Dalton propôs que átomos são <strong class="text-yellow-400">esferas maciças e indivisíveis</strong>. Cada elemento tem átomos com massa específica.</p>
+          <div class="flex items-center gap-2 text-sm text-gray-400"><span>⚛️</span> Modelo da "Bola de Bilhar"
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-0 md:left-1/2 w-8 h-8 bg-yellow-500 rounded-full transform md:-translate-x-1/2 flex items-center justify-center text-white font-bold">
+         2
+        </div>
+       </div><!-- 1897 - Thomson -->
+       <div class="timeline-card relative flex flex-col md:flex-row items-start md:items-center">
+        <div class="md:w-1/2 md:pr-12 md:text-right pl-12 md:pl-0">
+         <div class="bg-slate-800 rounded-2xl p-6 card-glow border-l-4 md:border-l-0 md:border-r-4 border-green-500"><span class="inline-block px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-bold mb-3">1897</span>
+          <h3 class="font-orbitron text-2xl font-bold text-green-400 mb-2">J.J. Thomson</h3>
+          <p class="text-gray-300 mb-4">Descobriu o <strong class="text-cyan-400">elétron</strong>! Propôs o modelo do "Pudim de Passas": elétrons negativos incrustados em uma massa positiva.</p>
+          <div class="flex items-center gap-2 text-sm text-gray-400"><span>🧁</span> Modelo do "Pudim de Passas"
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-0 md:left-1/2 w-8 h-8 bg-green-500 rounded-full transform md:-translate-x-1/2 flex items-center justify-center text-white font-bold">
+         3
+        </div>
+       </div><!-- 1911 - Rutherford -->
+       <div class="timeline-card relative flex flex-col md:flex-row items-start md:items-center">
+        <div class="md:w-1/2 md:order-2 md:pl-12 pl-12">
+         <div class="bg-slate-800 rounded-2xl p-6 card-glow border-l-4 border-orange-500"><span class="inline-block px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-sm font-bold mb-3">1911</span>
+          <h3 class="font-orbitron text-2xl font-bold text-orange-400 mb-2">Ernest Rutherford</h3>
+          <p class="text-gray-300 mb-4">Experimento da folha de ouro! Descobriu o <strong class="text-yellow-400">núcleo</strong> pequeno e positivo, com elétrons orbitando ao redor. O átomo é principalmente <strong class="text-cyan-400">espaço vazio</strong>!</p>
+          <div class="flex items-center gap-2 text-sm text-gray-400"><span>🪐</span> Modelo Planetário
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-0 md:left-1/2 w-8 h-8 bg-orange-500 rounded-full transform md:-translate-x-1/2 flex items-center justify-center text-white font-bold">
+         4
+        </div>
+       </div><!-- 1913 - Bohr -->
+       <div class="timeline-card relative flex flex-col md:flex-row items-start md:items-center">
+        <div class="md:w-1/2 md:pr-12 md:text-right pl-12 md:pl-0">
+         <div class="bg-slate-800 rounded-2xl p-6 card-glow border-l-4 md:border-l-0 md:border-r-4 border-purple-500"><span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm font-bold mb-3">1913</span>
+          <h3 class="font-orbitron text-2xl font-bold text-purple-400 mb-2">Niels Bohr</h3>
+          <p class="text-gray-300 mb-4">Aprimorou Rutherford: elétrons em <strong class="text-pink-400">órbitas específicas</strong> (níveis de energia). Explicou por que átomos emitem luz de cores específicas!</p>
+          <div class="flex items-center gap-2 text-sm text-gray-400"><span>🎯</span> Modelo de Camadas
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-0 md:left-1/2 w-8 h-8 bg-purple-500 rounded-full transform md:-translate-x-1/2 flex items-center justify-center text-white font-bold">
+         5
+        </div>
+       </div><!-- 1926 - Modelo Atual -->
+       <div class="timeline-card relative flex flex-col md:flex-row items-start md:items-center">
+        <div class="md:w-1/2 md:order-2 md:pl-12 pl-12">
+         <div class="bg-slate-800 rounded-2xl p-6 card-glow border-l-4 border-pink-500"><span class="inline-block px-3 py-1 bg-pink-500/20 text-pink-400 rounded-full text-sm font-bold mb-3">1926+</span>
+          <h3 class="font-orbitron text-2xl font-bold text-pink-400 mb-2">Modelo Quântico</h3>
+          <p class="text-gray-300 mb-4">Schrödinger, Heisenberg e outros: elétrons não têm posição definida! Existem em <strong class="text-cyan-400">nuvens de probabilidade</strong> chamadas orbitais.</p>
+          <div class="flex items-center gap-2 text-sm text-gray-400"><span>☁️</span> Modelo da Nuvem Eletrônica
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-0 md:left-1/2 w-8 h-8 bg-pink-500 rounded-full transform md:-translate-x-1/2 flex items-center justify-center text-white font-bold">
+         6
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- SECTION: Modelos Detalhados -->
+    <section id="models" class="section-content hidden">
+     <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-10">🔬 Explore os Modelos Atômicos</h2>
+     <div class="mb-6 flex flex-wrap justify-center gap-2"><button onclick="showModel('dalton')" class="model-btn px-4 py-2 rounded-full font-bold bg-yellow-500 text-black" data-model="dalton">Dalton</button> <button onclick="showModel('thomson')" class="model-btn px-4 py-2 rounded-full font-bold bg-slate-600 hover:bg-green-500 hover:text-black transition-all" data-model="thomson">Thomson</button> <button onclick="showModel('rutherford')" class="model-btn px-4 py-2 rounded-full font-bold bg-slate-600 hover:bg-orange-500 hover:text-black transition-all" data-model="rutherford">Rutherford</button> <button onclick="showModel('bohr')" class="model-btn px-4 py-2 rounded-full font-bold bg-slate-600 hover:bg-purple-500 transition-all" data-model="bohr">Bohr</button> <button onclick="showModel('quantum')" class="model-btn px-4 py-2 rounded-full font-bold bg-slate-600 hover:bg-pink-500 transition-all" data-model="quantum">Quântico</button>
+     </div><!-- Model Content -->
+     <div id="modelContent" class="bg-slate-800/50 rounded-3xl p-6 md:p-10 card-glow"><!-- Dalton -->
+      <div id="model-dalton" class="model-detail">
+       <div class="grid md:grid-cols-2 gap-8">
+        <div>
+         <h3 class="font-orbitron text-3xl font-bold text-yellow-400 mb-4">⚪ Modelo de Dalton (1803)</h3>
+         <p class="text-xl text-gray-200 mb-6">Também conhecido como "Bola de Bilhar"</p>
+         <div class="space-y-4">
+          <div class="bg-slate-700/50 rounded-xl p-4">
+           <h4 class="font-bold text-yellow-300 mb-2">📋 Principais Características:</h4>
+           <ul class="space-y-2 text-gray-300">
+            <li>✓ Átomo é uma <strong class="text-yellow-400">esfera maciça e indivisível</strong></li>
+            <li>✓ Átomos de um mesmo elemento são <strong class="text-cyan-400">idênticos</strong></li>
+            <li>✓ Átomos de elementos diferentes têm <strong class="text-pink-400">massas diferentes</strong></li>
+            <li>✓ Reações químicas = rearranjo de átomos</li>
+           </ul>
+          </div>
+          <div class="bg-red-900/30 rounded-xl p-4 border border-red-500/30">
+           <h4 class="font-bold text-red-400 mb-2">❌ Limitação:</h4>
+           <p class="text-gray-300">Não explicava fenômenos elétricos nem a existência de partículas subatômicas.</p>
+          </div>
+         </div>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+         <div class="relative">
+          <div class="w-40 h-40 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-full shadow-2xl shadow-yellow-500/30 flex items-center justify-center"><span class="font-orbitron font-bold text-2xl text-black">ÁTOMO</span>
+          </div>
+          <div class="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-xs font-bold">
+           Fe
+          </div>
+          <div class="absolute -bottom-4 -left-4 w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
+           O
+          </div>
+         </div>
+         <p class="text-gray-400 mt-6 text-center">Átomos como esferas maciças de diferentes tamanhos</p>
+        </div>
+       </div>
+      </div><!-- Thomson -->
+      <div id="model-thomson" class="model-detail hidden">
+       <div class="grid md:grid-cols-2 gap-8">
+        <div>
+         <h3 class="font-orbitron text-3xl font-bold text-green-400 mb-4">🧁 Modelo de Thomson (1897)</h3>
+         <p class="text-xl text-gray-200 mb-6">Também conhecido como "Pudim de Passas"</p>
+         <div class="space-y-4">
+          <div class="bg-slate-700/50 rounded-xl p-4">
+           <h4 class="font-bold text-green-300 mb-2">📋 Principais Características:</h4>
+           <ul class="space-y-2 text-gray-300">
+            <li>✓ Descobriu o <strong class="text-cyan-400">elétron</strong> (carga negativa)</li>
+            <li>✓ Átomo é uma <strong class="text-green-400">esfera positiva</strong></li>
+            <li>✓ Elétrons <strong class="text-yellow-400">incrustados</strong> na massa positiva</li>
+            <li>✓ Átomo é <strong class="text-pink-400">divisível</strong>!</li>
+           </ul>
+          </div>
+          <div class="bg-blue-900/30 rounded-xl p-4 border border-blue-500/30">
+           <h4 class="font-bold text-blue-400 mb-2">🔬 Experimento:</h4>
+           <p class="text-gray-300">Tubo de raios catódicos mostrou partículas negativas (elétrons) sendo desviadas por campos elétricos.</p>
+          </div>
+          <div class="bg-red-900/30 rounded-xl p-4 border border-red-500/30">
+           <h4 class="font-bold text-red-400 mb-2">❌ Limitação:</h4>
+           <p class="text-gray-300">Não explicava a existência do núcleo atômico.</p>
+          </div>
+         </div>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+         <div class="relative w-48 h-48">
+          <div class="w-full h-full bg-gradient-to-br from-green-400 to-emerald-600 rounded-full shadow-2xl shadow-green-500/30 flex items-center justify-center"><span class="text-4xl">+</span>
+          </div>
+          <div class="absolute top-6 left-8 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+           -
+          </div>
+          <div class="absolute top-12 right-10 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+           -
+          </div>
+          <div class="absolute bottom-16 left-12 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+           -
+          </div>
+          <div class="absolute bottom-8 right-16 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+           -
+          </div>
+          <div class="absolute top-20 left-20 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+           -
+          </div>
+         </div>
+         <p class="text-gray-400 mt-6 text-center">Elétrons negativos em massa positiva</p>
+        </div>
+       </div>
+      </div><!-- Rutherford -->
+      <div id="model-rutherford" class="model-detail hidden">
+       <div class="grid md:grid-cols-2 gap-8">
+        <div>
+         <h3 class="font-orbitron text-3xl font-bold text-orange-400 mb-4">🪐 Modelo de Rutherford (1911)</h3>
+         <p class="text-xl text-gray-200 mb-6">Também conhecido como "Modelo Planetário"</p>
+         <div class="space-y-4">
+          <div class="bg-slate-700/50 rounded-xl p-4">
+           <h4 class="font-bold text-orange-300 mb-2">📋 Principais Características:</h4>
+           <ul class="space-y-2 text-gray-300">
+            <li>✓ <strong class="text-yellow-400">Núcleo</strong> pequeno, denso e positivo</li>
+            <li>✓ Elétrons orbitam ao redor do núcleo</li>
+            <li>✓ Átomo é <strong class="text-cyan-400">99% espaço vazio</strong></li>
+            <li>✓ Núcleo contém quase toda a <strong class="text-pink-400">massa</strong></li>
+           </ul>
+          </div>
+          <div class="bg-blue-900/30 rounded-xl p-4 border border-blue-500/30">
+           <h4 class="font-bold text-blue-400 mb-2">🔬 Experimento da Folha de Ouro:</h4>
+           <p class="text-gray-300">Partículas alfa atravessaram a folha, mas algumas foram desviadas ou refletidas, provando a existência do núcleo!</p>
+          </div>
+          <div class="bg-red-900/30 rounded-xl p-4 border border-red-500/30">
+           <h4 class="font-bold text-red-400 mb-2">❌ Limitação:</h4>
+           <p class="text-gray-300">Não explicava por que elétrons não caíam no núcleo (perda de energia).</p>
+          </div>
+         </div>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+         <div class="relative w-56 h-56">
+          <div class="absolute inset-0 flex items-center justify-center">
+           <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-full nucleus-glow z-10"></div>
+          </div>
+          <div class="absolute inset-0 border-2 border-dashed border-orange-400/50 rounded-full animate-spin" style="animation-duration: 10s;"></div>
+          <div class="absolute inset-6 border-2 border-dashed border-yellow-400/50 rounded-full animate-spin" style="animation-duration: 8s; animation-direction: reverse;"></div>
+          <div class="electron absolute w-5 h-5 bg-cyan-400 rounded-full shadow-lg shadow-cyan-400/50" style="--orbit-radius: 100px; --orbit-time: 3s; top: 50%; left: 50%; margin: -10px;"></div>
+          <div class="electron absolute w-5 h-5 bg-pink-400 rounded-full shadow-lg shadow-pink-400/50" style="--orbit-radius: 70px; --orbit-time: 2s; top: 50%; left: 50%; margin: -10px;"></div>
+         </div>
+         <p class="text-gray-400 mt-4 text-center">Núcleo central com elétrons orbitando</p>
+        </div>
+       </div>
+      </div><!-- Bohr -->
+      <div id="model-bohr" class="model-detail hidden">
+       <div class="grid md:grid-cols-2 gap-8">
+        <div>
+         <h3 class="font-orbitron text-3xl font-bold text-purple-400 mb-4">🎯 Modelo de Bohr (1913)</h3>
+         <p class="text-xl text-gray-200 mb-6">Também conhecido como "Modelo de Camadas"</p>
+         <div class="space-y-4">
+          <div class="bg-slate-700/50 rounded-xl p-4">
+           <h4 class="font-bold text-purple-300 mb-2">📋 Principais Características:</h4>
+           <ul class="space-y-2 text-gray-300">
+            <li>✓ Elétrons em <strong class="text-purple-400">órbitas fixas</strong> (níveis de energia)</li>
+            <li>✓ Níveis: K, L, M, N... (1, 2, 3, 4...)</li>
+            <li>✓ Elétrons podem <strong class="text-yellow-400">saltar</strong> entre níveis</li>
+            <li>✓ Explica <strong class="text-pink-400">espectros de emissão</strong></li>
+           </ul>
+          </div>
+          <div class="bg-green-900/30 rounded-xl p-4 border border-green-500/30">
+           <h4 class="font-bold text-green-400 mb-2">💡 Importância:</h4>
+           <p class="text-gray-300">Explicou por que cada elemento emite luz de cores específicas (como no teste de chama)!</p>
+          </div>
+          <div class="bg-red-900/30 rounded-xl p-4 border border-red-500/30">
+           <h4 class="font-bold text-red-400 mb-2">❌ Limitação:</h4>
+           <p class="text-gray-300">Funciona bem só para o hidrogênio. Não explica átomos mais complexos.</p>
+          </div>
+         </div>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+         <div class="relative w-64 h-64">
+          <div class="absolute inset-0 flex items-center justify-center">
+           <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-full nucleus-glow z-10"></div>
+          </div><!-- Camadas com labels -->
+          <div class="absolute inset-0 border-3 border-purple-500 rounded-full" style="border-width: 3px;"></div>
+          <div class="absolute inset-8 border-3 border-blue-500 rounded-full" style="border-width: 3px;"></div>
+          <div class="absolute inset-16 border-3 border-cyan-500 rounded-full" style="border-width: 3px;"></div><!-- Labels --> <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-purple-400 font-bold text-sm">N=3</span> <span class="absolute top-2 left-1/2 transform -translate-x-1/2 text-blue-400 font-bold text-sm">N=2</span> <span class="absolute top-10 left-1/2 transform -translate-x-1/2 text-cyan-400 font-bold text-sm">N=1</span>
+          <div class="electron absolute w-4 h-4 bg-purple-400 rounded-full shadow-lg" style="--orbit-radius: 125px; --orbit-time: 4s; top: 50%; left: 50%; margin: -8px;"></div>
+          <div class="electron absolute w-4 h-4 bg-blue-400 rounded-full shadow-lg" style="--orbit-radius: 90px; --orbit-time: 3s; top: 50%; left: 50%; margin: -8px;"></div>
+          <div class="electron absolute w-4 h-4 bg-cyan-400 rounded-full shadow-lg" style="--orbit-radius: 55px; --orbit-time: 2s; top: 50%; left: 50%; margin: -8px;"></div>
+         </div>
+         <p class="text-gray-400 mt-4 text-center">Níveis de energia definidos (camadas)</p>
+        </div>
+       </div>
+      </div><!-- Quântico -->
+      <div id="model-quantum" class="model-detail hidden">
+       <div class="grid md:grid-cols-2 gap-8">
+        <div>
+         <h3 class="font-orbitron text-3xl font-bold text-pink-400 mb-4">☁️ Modelo Quântico (1926+)</h3>
+         <p class="text-xl text-gray-200 mb-6">Também conhecido como "Nuvem Eletrônica"</p>
+         <div class="space-y-4">
+          <div class="bg-slate-700/50 rounded-xl p-4">
+           <h4 class="font-bold text-pink-300 mb-2">📋 Principais Características:</h4>
+           <ul class="space-y-2 text-gray-300">
+            <li>✓ Elétrons em <strong class="text-pink-400">orbitais</strong> (regiões de probabilidade)</li>
+            <li>✓ Não podemos saber <strong class="text-cyan-400">posição exata</strong></li>
+            <li>✓ <strong class="text-yellow-400">Dualidade onda-partícula</strong></li>
+            <li>✓ Números quânticos descrevem o elétron</li>
+           </ul>
+          </div>
+          <div class="bg-green-900/30 rounded-xl p-4 border border-green-500/30">
+           <h4 class="font-bold text-green-400 mb-2">🧠 Cientistas Importantes:</h4>
+           <p class="text-gray-300">Schrödinger (equação), Heisenberg (incerteza), De Broglie (dualidade), Pauli (exclusão).</p>
+          </div>
+          <div class="bg-blue-900/30 rounded-xl p-4 border border-blue-500/30">
+           <h4 class="font-bold text-blue-400 mb-2">✅ Modelo Atual:</h4>
+           <p class="text-gray-300">É o modelo aceito pela ciência hoje! Explica comportamentos de todos os átomos e moléculas.</p>
+          </div>
+         </div>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+         <div class="relative w-56 h-56">
+          <div class="absolute inset-0 flex items-center justify-center">
+           <div class="w-8 h-8 bg-gradient-to-br from-red-500 to-orange-500 rounded-full nucleus-glow z-20"></div>
+          </div><!-- Nuvem de probabilidade -->
+          <div class="absolute inset-0 bg-gradient-radial from-pink-500/40 via-purple-500/20 to-transparent rounded-full animate-pulse"></div>
+          <div class="absolute inset-4 bg-gradient-radial from-cyan-500/30 via-blue-500/15 to-transparent rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+          <div class="absolute inset-8 bg-gradient-radial from-pink-400/40 via-purple-400/20 to-transparent rounded-full animate-pulse" style="animation-delay: 1s;"></div><!-- Pontos representando probabilidade -->
+          <div class="absolute w-2 h-2 bg-cyan-400 rounded-full opacity-70" style="top: 30%; left: 40%;"></div>
+          <div class="absolute w-2 h-2 bg-pink-400 rounded-full opacity-60" style="top: 45%; left: 70%;"></div>
+          <div class="absolute w-2 h-2 bg-cyan-400 rounded-full opacity-80" style="top: 60%; left: 35%;"></div>
+          <div class="absolute w-2 h-2 bg-pink-400 rounded-full opacity-50" style="top: 35%; left: 60%;"></div>
+          <div class="absolute w-2 h-2 bg-cyan-400 rounded-full opacity-70" style="top: 55%; left: 55%;"></div>
+          <div class="absolute w-2 h-2 bg-pink-400 rounded-full opacity-60" style="top: 70%; left: 45%;"></div>
+         </div>
+         <p class="text-gray-400 mt-4 text-center">Nuvem de probabilidade (orbital)</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- SECTION: Estados da Matéria -->
+    <section id="states" class="section-content hidden">
+     <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-10">🌡️ Estados Físicos e Organização Atômica</h2>
+     <div class="bg-slate-800/50 rounded-3xl p-6 md:p-10 card-glow mb-8">
+      <p class="text-xl text-gray-200 text-center mb-8">A organização dos átomos e moléculas determina o <strong class="text-yellow-400">estado físico</strong> da matéria e suas <strong class="text-cyan-400">propriedades</strong>!</p><!-- Interactive State Simulator -->
+      <div class="bg-slate-900 rounded-2xl p-6 mb-8">
+       <h3 class="font-bold text-xl text-center text-white mb-4">🎮 Simulador Interativo</h3>
+       <p class="text-center text-gray-400 mb-6">Clique nos botões para ver como as partículas se comportam em cada estado!</p>
+       <div class="flex justify-center gap-4 mb-6 flex-wrap"><button onclick="setStateSimulation('solid')" id="btn-solid" class="state-btn px-6 py-3 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-500 transition-all"> 🧊 Sólido </button> <button onclick="setStateSimulation('liquid')" id="btn-liquid" class="state-btn px-6 py-3 rounded-xl font-bold bg-slate-600 text-white hover:bg-cyan-500 transition-all"> 💧 Líquido </button> <button onclick="setStateSimulation('gas')" id="btn-gas" class="state-btn px-6 py-3 rounded-xl font-bold bg-slate-600 text-white hover:bg-orange-500 transition-all"> 💨 Gasoso </button>
+       </div>
+       <div id="stateSimulator" class="relative h-48 bg-slate-800 rounded-xl overflow-hidden border-2 border-slate-700"><!-- Particles will be rendered here -->
+       </div>
+       <div id="stateInfo" class="mt-6 bg-slate-700/50 rounded-xl p-4">
+        <h4 class="font-bold text-blue-400 text-lg mb-2">🧊 Estado Sólido</h4>
+        <ul class="text-gray-300 space-y-1">
+         <li>• Partículas <strong class="text-yellow-400">organizadas</strong> em posições fixas</li>
+         <li>• <strong class="text-cyan-400">Vibram</strong> mas não se movem livremente</li>
+         <li>• Forma e volume <strong class="text-pink-400">definidos</strong></li>
+         <li>• Forças de atração <strong class="text-green-400">muito fortes</strong></li>
+        </ul>
+       </div>
+      </div><!-- State Comparison Table -->
+      <div class="overflow-x-auto">
+       <table class="w-full text-left">
+        <thead>
+         <tr class="border-b-2 border-purple-500">
+          <th class="py-4 px-4 font-orbitron text-purple-400">Propriedade</th>
+          <th class="py-4 px-4 font-orbitron text-blue-400">🧊 Sólido</th>
+          <th class="py-4 px-4 font-orbitron text-cyan-400">💧 Líquido</th>
+          <th class="py-4 px-4 font-orbitron text-orange-400">💨 Gasoso</th>
+         </tr>
+        </thead>
+        <tbody class="text-gray-300">
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-4 font-bold">Forma</td>
+          <td class="py-3 px-4">Definida</td>
+          <td class="py-3 px-4">Variável (recipiente)</td>
+          <td class="py-3 px-4">Variável (recipiente)</td>
+         </tr>
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-4 font-bold">Volume</td>
+          <td class="py-3 px-4">Definido</td>
+          <td class="py-3 px-4">Definido</td>
+          <td class="py-3 px-4">Variável</td>
+         </tr>
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-4 font-bold">Compressibilidade</td>
+          <td class="py-3 px-4">Muito baixa</td>
+          <td class="py-3 px-4">Baixa</td>
+          <td class="py-3 px-4">Alta</td>
+         </tr>
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-4 font-bold">Organização</td>
+          <td class="py-3 px-4">Ordenada</td>
+          <td class="py-3 px-4">Parcialmente ordenada</td>
+          <td class="py-3 px-4">Desordenada</td>
+         </tr>
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-4 font-bold">Energia cinética</td>
+          <td class="py-3 px-4">Baixa</td>
+          <td class="py-3 px-4">Média</td>
+          <td class="py-3 px-4">Alta</td>
+         </tr>
+         <tr>
+          <td class="py-3 px-4 font-bold">Forças de atração</td>
+          <td class="py-3 px-4">Muito fortes</td>
+          <td class="py-3 px-4">Moderadas</td>
+          <td class="py-3 px-4">Fracas/desprezíveis</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- Mudanças de Estado -->
+     <div class="bg-slate-800/50 rounded-3xl p-6 md:p-10 card-glow">
+      <h3 class="font-orbitron text-2xl font-bold text-yellow-400 mb-6 text-center">🔄 Mudanças de Estado</h3>
+      <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+       <div class="text-center p-4 bg-blue-600/30 rounded-xl border border-blue-500/50"><span class="text-3xl">🧊</span>
+        <p class="font-bold text-blue-400">SÓLIDO</p>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-sm text-yellow-400">Fusão →</span> <span class="text-sm text-cyan-400">← Solidificação</span>
+       </div>
+       <div class="text-center p-4 bg-cyan-600/30 rounded-xl border border-cyan-500/50"><span class="text-3xl">💧</span>
+        <p class="font-bold text-cyan-400">LÍQUIDO</p>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-sm text-orange-400">Vaporização →</span> <span class="text-sm text-blue-400">← Condensação</span>
+       </div>
+       <div class="text-center p-4 bg-orange-600/30 rounded-xl border border-orange-500/50"><span class="text-3xl">💨</span>
+        <p class="font-bold text-orange-400">GASOSO</p>
+       </div>
+      </div>
+      <div class="text-center">
+       <p class="text-gray-300 mb-2"><strong class="text-pink-400">Sublimação:</strong> Sólido → Gasoso (ex: gelo seco, naftalina)</p>
+       <p class="text-gray-300"><strong class="text-purple-400">Ressublimação:</strong> Gasoso → Sólido</p>
+      </div>
+     </div>
+    </section><!-- SECTION: Exercícios -->
+    <section id="quiz" class="section-content hidden">
+     <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-10">📝 Teste seus Conhecimentos!</h2>
+     <div id="quizContainer"><!-- Quiz questions will be rendered here -->
+     </div>
+     <div id="quizResults" class="hidden bg-slate-800/50 rounded-3xl p-8 card-glow text-center">
+      <h3 class="font-orbitron text-3xl font-bold mb-4" id="resultsTitle">Parabéns!</h3>
+      <p class="text-xl text-gray-300 mb-6" id="resultsText"></p>
+      <div class="w-full bg-slate-700 rounded-full h-6 mb-6">
+       <div id="resultsBar" class="h-6 rounded-full progress-bar bg-gradient-to-r from-green-500 to-emerald-500" style="width: 0%"></div>
+      </div><button onclick="resetQuiz()" class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-bold text-lg hover:from-purple-500 hover:to-pink-500 transition-all"> 🔄 Tentar Novamente </button>
+     </div>
+    </section><!-- SECTION: Prova Paulista -->
+    <section id="paulista" class="section-content hidden">
+     <div class="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 rounded-3xl p-6 md:p-10 border border-yellow-500/30 mb-8">
+      <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-yellow-400 mb-4 flex items-center gap-3"><span class="text-4xl">🏆</span> Preparação para a Prova Paulista</h2>
+      <p class="text-xl text-gray-200">Foco nas habilidades cobradas! Vamos treinar as expectativas de aprendizagem.</p>
+     </div><!-- Expectativa 1 -->
+     <div class="bg-slate-800/50 rounded-3xl p-6 md:p-10 card-glow mb-8">
+      <div class="flex items-start gap-4 mb-6"><span class="text-3xl bg-green-600 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">1</span>
+       <div>
+        <h3 class="font-orbitron text-xl md:text-2xl font-bold text-green-400 mb-2">Relacionar a organização dos átomos aos estados físicos da matéria e suas propriedades</h3>
+        <p class="text-gray-300">Entenda como a disposição das partículas afeta as características da matéria.</p>
+       </div>
+      </div>
+      <div class="bg-slate-900 rounded-2xl p-6 mb-6">
+       <h4 class="font-bold text-lg text-cyan-400 mb-4">📌 Pontos-chave para a prova:</h4>
+       <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-slate-800 rounded-xl p-4">
+         <p class="font-bold text-yellow-400 mb-2">Sólidos:</p>
+         <p class="text-gray-300 text-sm">Partículas organizadas + forças fortes = forma definida, não comprimível</p>
+        </div>
+        <div class="bg-slate-800 rounded-xl p-4">
+         <p class="font-bold text-cyan-400 mb-2">Líquidos:</p>
+         <p class="text-gray-300 text-sm">Partículas mais livres + forças moderadas = forma variável, volume definido</p>
+        </div>
+        <div class="bg-slate-800 rounded-xl p-4">
+         <p class="font-bold text-orange-400 mb-2">Gases:</p>
+         <p class="text-gray-300 text-sm">Partículas muito afastadas + forças fracas = forma e volume variáveis, comprimível</p>
+        </div>
+        <div class="bg-slate-800 rounded-xl p-4">
+         <p class="font-bold text-pink-400 mb-2">Temperatura:</p>
+         <p class="text-gray-300 text-sm">Maior temperatura = maior agitação = mudança de estado (sólido → líquido → gás)</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Expectativa 2 -->
+     <div class="bg-slate-800/50 rounded-3xl p-6 md:p-10 card-glow mb-8">
+      <div class="flex items-start gap-4 mb-6"><span class="text-3xl bg-purple-600 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">2</span>
+       <div>
+        <h3 class="font-orbitron text-xl md:text-2xl font-bold text-purple-400 mb-2">Identificar as características dos diferentes modelos atômicos</h3>
+        <p class="text-gray-300">Saiba diferenciar cada modelo e suas contribuições para a ciência.</p>
+       </div>
+      </div>
+      <div class="overflow-x-auto">
+       <table class="w-full text-left text-sm md:text-base">
+        <thead>
+         <tr class="border-b-2 border-purple-500">
+          <th class="py-3 px-3 font-orbitron text-purple-400">Modelo</th>
+          <th class="py-3 px-3 font-orbitron text-cyan-400">Característica Principal</th>
+          <th class="py-3 px-3 font-orbitron text-yellow-400">Palavra-Chave</th>
+         </tr>
+        </thead>
+        <tbody class="text-gray-300">
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-3 font-bold text-yellow-400">Dalton</td>
+          <td class="py-3 px-3">Esfera maciça, indivisível</td>
+          <td class="py-3 px-3"><span class="bg-yellow-600/30 px-2 py-1 rounded">Bola de bilhar</span></td>
+         </tr>
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-3 font-bold text-green-400">Thomson</td>
+          <td class="py-3 px-3">Descobriu elétron, massa positiva com elétrons incrustados</td>
+          <td class="py-3 px-3"><span class="bg-green-600/30 px-2 py-1 rounded">Pudim de passas</span></td>
+         </tr>
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-3 font-bold text-orange-400">Rutherford</td>
+          <td class="py-3 px-3">Descobriu núcleo, átomo é espaço vazio</td>
+          <td class="py-3 px-3"><span class="bg-orange-600/30 px-2 py-1 rounded">Planetário</span></td>
+         </tr>
+         <tr class="border-b border-slate-700">
+          <td class="py-3 px-3 font-bold text-purple-400">Bohr</td>
+          <td class="py-3 px-3">Órbitas/camadas com energia definida</td>
+          <td class="py-3 px-3"><span class="bg-purple-600/30 px-2 py-1 rounded">Camadas (K,L,M,N)</span></td>
+         </tr>
+         <tr>
+          <td class="py-3 px-3 font-bold text-pink-400">Quântico</td>
+          <td class="py-3 px-3">Orbitais, nuvem de probabilidade</td>
+          <td class="py-3 px-3"><span class="bg-pink-600/30 px-2 py-1 rounded">Nuvem eletrônica</span></td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- Questões Estilo Prova Paulista -->
+     <div class="bg-slate-800/50 rounded-3xl p-6 md:p-10 card-glow">
+      <h3 class="font-orbitron text-2xl font-bold text-yellow-400 mb-6 flex items-center gap-3"><span>📋</span> Questões Estilo Prova Paulista</h3>
+      <div id="paulistaQuizContainer"><!-- Paulista quiz questions will be rendered here -->
+      </div>
+      <div id="paulistaResults" class="hidden mt-8 bg-gradient-to-r from-green-600/30 to-emerald-600/30 rounded-2xl p-6 border border-green-500/30">
+       <h4 class="font-bold text-2xl text-green-400 mb-2" id="paulistaResultsTitle">Resultado</h4>
+       <p class="text-gray-200" id="paulistaResultsText"></p><button onclick="resetPaulistaQuiz()" class="mt-4 px-6 py-2 bg-green-600 rounded-full font-bold hover:bg-green-500 transition-all"> 🔄 Refazer </button>
+      </div>
+     </div>
+    </section>
+   </main><!-- Footer -->
+   <footer class="py-8 px-4 text-center border-t border-purple-500/30 mt-12">
+    <p class="text-gray-400">🔬 <span class="font-orbitron">Jornada Atômica</span> - Material didático para Ensino Médio</p>
+    <p class="text-sm text-gray-500 mt-2">Desenvolvido para auxiliar no aprendizado de Química</p>
+   </footer>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      main_title: '🔬 JORNADA ATÔMICA',
+      subtitle: 'Dos Filósofos Gregos ao Modelo Atual',
+      primary_color: '#6366f1',
+      secondary_color: '#ec4899',
+      accent_color: '#f59e0b',
+      text_color: '#e2e8f0',
+      background_color: '#0f172a'
+    };
+    
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const titleEl = document.getElementById('mainTitle');
+          const subtitleEl = document.getElementById('subtitle');
+          if (titleEl) titleEl.textContent = config.main_title || defaultConfig.main_title;
+          if (subtitleEl) subtitleEl.textContent = config.subtitle || defaultConfig.subtitle;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => window.elementSdk.setConfig({ primary_color: value })
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => window.elementSdk.setConfig({ secondary_color: value })
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['main_title', config.main_title || defaultConfig.main_title],
+          ['subtitle', config.subtitle || defaultConfig.subtitle]
+        ])
+      });
+    }
+    
+    // Section Navigation
+    function showSection(sectionId) {
+      document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(sectionId).classList.remove('hidden');
+      document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+      
+      window.scrollTo({ top: 200, behavior: 'smooth' });
+    }
+    
+    // Model Navigation
+    function showModel(modelId) {
+      document.querySelectorAll('.model-detail').forEach(m => m.classList.add('hidden'));
+      document.querySelectorAll('.model-btn').forEach(b => {
+        b.classList.remove('bg-yellow-500', 'bg-green-500', 'bg-orange-500', 'bg-purple-500', 'bg-pink-500', 'text-black');
+        b.classList.add('bg-slate-600');
+      });
+      
+      document.getElementById(`model-${modelId}`).classList.remove('hidden');
+      
+      const btn = document.querySelector(`[data-model="${modelId}"]`);
+      btn.classList.remove('bg-slate-600');
+      
+      const colors = {
+        dalton: ['bg-yellow-500', 'text-black'],
+        thomson: ['bg-green-500', 'text-black'],
+        rutherford: ['bg-orange-500', 'text-black'],
+        bohr: ['bg-purple-500'],
+        quantum: ['bg-pink-500']
+      };
+      
+      colors[modelId].forEach(c => btn.classList.add(c));
+    }
+    
+    // State Simulation
+    let particles = [];
+    let animationId = null;
+    
+    function setStateSimulation(state) {
+      document.querySelectorAll('.state-btn').forEach(b => {
+        b.classList.remove('bg-blue-600', 'bg-cyan-600', 'bg-orange-600');
+        b.classList.add('bg-slate-600');
+      });
+      
+      const btnColors = { solid: 'bg-blue-600', liquid: 'bg-cyan-600', gas: 'bg-orange-600' };
+      document.getElementById(`btn-${state}`).classList.remove('bg-slate-600');
+      document.getElementById(`btn-${state}`).classList.add(btnColors[state]);
+      
+      const container = document.getElementById('stateSimulator');
+      container.innerHTML = '';
+      
+      if (animationId) cancelAnimationFrame(animationId);
+      
+      particles = [];
+      const numParticles = 25;
+      
+      for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'state-particle';
+        
+        let x, y, vx = 0, vy = 0;
+        
+        if (state === 'solid') {
+          const cols = 5;
+          const row = Math.floor(i / cols);
+          const col = i % cols;
+          x = 50 + col * 60;
+          y = 30 + row * 35;
+          particle.style.background = 'linear-gradient(135deg, #3b82f6, #1d4ed8)';
+          particle.classList.add('particle-solid');
+        } else if (state === 'liquid') {
+          x = 30 + Math.random() * 280;
+          y = 80 + Math.random() * 100;
+          vx = (Math.random() - 0.5) * 1;
+          vy = (Math.random() - 0.5) * 1;
+          particle.style.background = 'linear-gradient(135deg, #06b6d4, #0891b2)';
+          particle.classList.add('particle-liquid');
+        } else {
+          x = Math.random() * 320;
+          y = Math.random() * 180;
+          vx = (Math.random() - 0.5) * 3;
+          vy = (Math.random() - 0.5) * 3;
+          particle.style.background = 'linear-gradient(135deg, #f97316, #ea580c)';
+        }
+        
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        container.appendChild(particle);
+        
+        particles.push({ el: particle, x, y, vx, vy, baseX: x, baseY: y });
+      }
+      
+      if (state === 'liquid' || state === 'gas') {
+        animateParticles(state);
+      }
+      
+      updateStateInfo(state);
+    }
+    
+    function animateParticles(state) {
+      const container = document.getElementById('stateSimulator');
+      const width = container.offsetWidth - 16;
+      const height = container.offsetHeight - 16;
+      
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+        
+        p.x = Math.max(0, Math.min(width, p.x));
+        p.y = Math.max(0, Math.min(height, p.y));
+        
+        p.el.style.left = p.x + 'px';
+        p.el.style.top = p.y + 'px';
+      });
+      
+      animationId = requestAnimationFrame(() => animateParticles(state));
+    }
+    
+    function updateStateInfo(state) {
+      const info = document.getElementById('stateInfo');
+      const content = {
+        solid: {
+          title: '🧊 Estado Sólido',
+          color: 'text-blue-400',
+          points: [
+            'Partículas <strong class="text-yellow-400">organizadas</strong> em posições fixas',
+            '<strong class="text-cyan-400">Vibram</strong> mas não se movem livremente',
+            'Forma e volume <strong class="text-pink-400">definidos</strong>',
+            'Forças de atração <strong class="text-green-400">muito fortes</strong>'
+          ]
+        },
+        liquid: {
+          title: '💧 Estado Líquido',
+          color: 'text-cyan-400',
+          points: [
+            'Partículas <strong class="text-yellow-400">próximas</strong> mas com liberdade de movimento',
+            'Deslizam umas sobre as outras',
+            'Forma <strong class="text-pink-400">variável</strong>, volume definido',
+            'Forças de atração <strong class="text-green-400">moderadas</strong>'
+          ]
+        },
+        gas: {
+          title: '💨 Estado Gasoso',
+          color: 'text-orange-400',
+          points: [
+            'Partículas <strong class="text-yellow-400">muito afastadas</strong>',
+            'Movimento <strong class="text-cyan-400">rápido e desordenado</strong>',
+            'Forma e volume <strong class="text-pink-400">variáveis</strong>',
+            'Forças de atração <strong class="text-green-400">muito fracas</strong>'
+          ]
+        }
+      };
+      
+      const c = content[state];
+      info.innerHTML = `
+        <h4 class="font-bold ${c.color} text-lg mb-2">${c.title}</h4>
+        <ul class="text-gray-300 space-y-1">
+          ${c.points.map(p => `<li>• ${p}</li>`).join('')}
+        </ul>
+      `;
+    }
+    
+    // Initialize state simulation
+    setTimeout(() => setStateSimulation('solid'), 100);
+    
+    // Quiz System
+    const quizQuestions = [
+      {
+        question: 'Qual cientista propôs que o átomo é uma esfera maciça e indivisível?',
+        options: ['Thomson', 'Dalton', 'Rutherford', 'Bohr'],
+        correct: 1,
+        explanation: 'John Dalton (1803) propôs o modelo da "bola de bilhar", onde o átomo seria uma esfera maciça e indivisível.'
+      },
+      {
+        question: 'O experimento da folha de ouro foi realizado por qual cientista?',
+        options: ['Bohr', 'Thomson', 'Rutherford', 'Schrödinger'],
+        correct: 2,
+        explanation: 'Ernest Rutherford realizou o experimento da folha de ouro em 1911, descobrindo o núcleo atômico.'
+      },
+      {
+        question: 'Qual modelo é conhecido como "pudim de passas"?',
+        options: ['Dalton', 'Rutherford', 'Thomson', 'Bohr'],
+        correct: 2,
+        explanation: 'O modelo de Thomson (1897) é conhecido como "pudim de passas", com elétrons incrustados em uma massa positiva.'
+      },
+      {
+        question: 'No modelo de Bohr, os elétrons estão em:',
+        options: ['Posições aleatórias', 'Órbitas fixas com energia definida', 'Incrustados na massa positiva', 'Nuvens de probabilidade'],
+        correct: 1,
+        explanation: 'No modelo de Bohr (1913), os elétrons ocupam órbitas específicas chamadas níveis de energia (K, L, M, N...).'
+      },
+      {
+        question: 'O modelo quântico atual descreve os elétrons como:',
+        options: ['Partículas em órbitas circulares', 'Esferas maciças', 'Nuvens de probabilidade (orbitais)', 'Passas em um pudim'],
+        correct: 2,
+        explanation: 'O modelo quântico descreve elétrons em orbitais, que são regiões de probabilidade onde é mais provável encontrá-los.'
+      }
+    ];
+    
+    let quizAnswers = [];
+    let quizSubmitted = false;
+    
+    function renderQuiz() {
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = quizQuestions.map((q, i) => `
+        <div class="bg-slate-800/50 rounded-2xl p-6 card-glow mb-6">
+          <h3 class="font-bold text-xl text-white mb-4">
+            <span class="text-purple-400">${i + 1}.</span> ${q.question}
+          </h3>
+          <div class="space-y-3" id="quiz-options-${i}">
+            ${q.options.map((opt, j) => `
+              <button onclick="selectQuizAnswer(${i}, ${j})" 
+                class="quiz-option w-full text-left p-4 rounded-xl border-2 border-slate-600 bg-slate-700/50 hover:border-purple-400 transition-all"
+                data-question="${i}" data-option="${j}">
+                <span class="font-bold text-purple-400 mr-2">${String.fromCharCode(65 + j)})</span>
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <div id="quiz-feedback-${i}" class="hidden mt-4 p-4 rounded-xl"></div>
+        </div>
+      `).join('');
+      
+      container.innerHTML += `
+        <div class="text-center">
+          <button onclick="submitQuiz()" id="submitQuizBtn" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-bold text-xl hover:from-purple-500 hover:to-pink-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            ✅ Verificar Respostas
+          </button>
+        </div>
+      `;
+    }
+    
+    function selectQuizAnswer(questionIndex, optionIndex) {
+      if (quizSubmitted) return;
+      
+      quizAnswers[questionIndex] = optionIndex;
+      
+      document.querySelectorAll(`[data-question="${questionIndex}"]`).forEach(btn => {
+        btn.classList.remove('selected', 'border-purple-500');
+        btn.classList.add('border-slate-600');
+      });
+      
+      const selectedBtn = document.querySelector(`[data-question="${questionIndex}"][data-option="${optionIndex}"]`);
+      selectedBtn.classList.add('selected', 'border-purple-500');
+      selectedBtn.classList.remove('border-slate-600');
+      
+      const allAnswered = quizQuestions.every((_, i) => quizAnswers[i] !== undefined);
+      document.getElementById('submitQuizBtn').disabled = !allAnswered;
+    }
+    
+    function submitQuiz() {
+      if (quizSubmitted) return;
+      quizSubmitted = true;
+      
+      let correct = 0;
+      
+      quizQuestions.forEach((q, i) => {
+        const feedback = document.getElementById(`quiz-feedback-${i}`);
+        const isCorrect = quizAnswers[i] === q.correct;
+        
+        if (isCorrect) correct++;
+        
+        document.querySelectorAll(`[data-question="${i}"]`).forEach(btn => {
+          const optIndex = parseInt(btn.dataset.option);
+          btn.classList.remove('selected');
+          
+          if (optIndex === q.correct) {
+            btn.classList.add('correct');
+          } else if (optIndex === quizAnswers[i]) {
+            btn.classList.add('incorrect');
+          }
+          
+          btn.style.pointerEvents = 'none';
+        });
+        
+        feedback.classList.remove('hidden');
+        feedback.className = `mt-4 p-4 rounded-xl ${isCorrect ? 'bg-green-900/50 border border-green-500/50' : 'bg-red-900/50 border border-red-500/50'}`;
+        feedback.innerHTML = `
+          <p class="font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'} mb-2">
+            ${isCorrect ? '✅ Correto!' : '❌ Incorreto'}
+          </p>
+          <p class="text-gray-300">${q.explanation}</p>
+        `;
+      });
+      
+      document.getElementById('submitQuizBtn').style.display = 'none';
+      
+      const results = document.getElementById('quizResults');
+      results.classList.remove('hidden');
+      
+      const percentage = (correct / quizQuestions.length) * 100;
+      
+      document.getElementById('resultsTitle').textContent = percentage >= 80 ? '🎉 Excelente!' : percentage >= 60 ? '👍 Bom trabalho!' : '📚 Continue estudando!';
+      document.getElementById('resultsText').textContent = `Você acertou ${correct} de ${quizQuestions.length} questões (${percentage.toFixed(0)}%)`;
+      
+      setTimeout(() => {
+        document.getElementById('resultsBar').style.width = percentage + '%';
+      }, 100);
+    }
+    
+    function resetQuiz() {
+      quizAnswers = [];
+      quizSubmitted = false;
+      document.getElementById('quizResults').classList.add('hidden');
+      renderQuiz();
+    }
+    
+    // Prova Paulista Quiz
+    const paulistaQuestions = [
+      {
+        question: '(PROVA PAULISTA) Sobre os estados físicos da matéria e a organização de suas partículas, é CORRETO afirmar que:',
+        options: [
+          'No estado sólido, as partículas estão muito afastadas e se movem rapidamente.',
+          'No estado líquido, as partículas têm forma e volume definidos.',
+          'No estado gasoso, as partículas estão muito próximas e organizadas.',
+          'No estado sólido, as partículas estão organizadas e vibram em posições fixas.'
+        ],
+        correct: 3,
+        explanation: 'No estado sólido, as partículas estão organizadas em estruturas bem definidas e apenas vibram em torno de posições fixas, o que confere forma e volume definidos ao material.'
+      },
+      {
+        question: '(PROVA PAULISTA) O modelo atômico que introduziu a ideia de que os elétrons estão distribuídos em camadas com energias específicas foi proposto por:',
+        options: ['Dalton', 'Thomson', 'Rutherford', 'Bohr'],
+        correct: 3,
+        explanation: 'Niels Bohr (1913) propôs que os elétrons ocupam níveis de energia específicos (camadas K, L, M, N...), resolvendo parcialmente o problema da instabilidade do modelo de Rutherford.'
+      },
+      {
+        question: '(PROVA PAULISTA) Ao aquecer um cubo de gelo até que se transforme em vapor, observamos mudanças de estado. Sobre a organização das partículas nesse processo, podemos afirmar que:',
+        options: [
+          'As partículas ficam mais organizadas ao longo do aquecimento.',
+          'As forças de atração entre as partículas aumentam.',
+          'A energia cinética das partículas diminui progressivamente.',
+          'As partículas se afastam e aumentam sua energia cinética.'
+        ],
+        correct: 3,
+        explanation: 'Com o aquecimento, a energia cinética das partículas aumenta, fazendo-as vibrar mais intensamente (sólido → líquido) e depois se afastar muito (líquido → gás).'
+      },
+      {
+        question: '(PROVA PAULISTA) O experimento de Rutherford com a folha de ouro demonstrou que:',
+        options: [
+          'O átomo é uma esfera maciça e indivisível.',
+          'Existem partículas negativas chamadas elétrons.',
+          'O átomo possui um núcleo pequeno e denso, com grande espaço vazio ao redor.',
+          'Os elétrons estão distribuídos em camadas de energia.'
+        ],
+        correct: 2,
+        explanation: 'O experimento da folha de ouro (1911) mostrou que a maioria das partículas alfa atravessava a folha, mas algumas eram desviadas ou refletidas, provando a existência de um núcleo pequeno, denso e positivo.'
+      },
+      {
+        question: '(PROVA PAULISTA) Qual propriedade dos gases está diretamente relacionada ao grande espaçamento entre suas partículas?',
+        options: [
+          'Forma definida',
+          'Alta compressibilidade',
+          'Volume constante',
+          'Baixa energia cinética'
+        ],
+        correct: 1,
+        explanation: 'Os gases são altamente compressíveis porque suas partículas estão muito afastadas, permitindo que sejam aproximadas quando submetidas à pressão.'
+      }
+    ];
+    
+    let paulistaAnswers = [];
+    let paulistaSubmitted = false;
+    
+    function renderPaulistaQuiz() {
+      const container = document.getElementById('paulistaQuizContainer');
+      container.innerHTML = paulistaQuestions.map((q, i) => `
+        <div class="bg-slate-900 rounded-2xl p-6 mb-6 border border-yellow-500/20">
+          <h4 class="font-bold text-lg text-white mb-4">
+            <span class="text-yellow-400">Questão ${i + 1}.</span> ${q.question}
+          </h4>
+          <div class="space-y-3" id="paulista-options-${i}">
+            ${q.options.map((opt, j) => `
+              <button onclick="selectPaulistaAnswer(${i}, ${j})" 
+                class="quiz-option w-full text-left p-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 hover:border-yellow-400 transition-all text-sm"
+                data-pquestion="${i}" data-poption="${j}">
+                <span class="font-bold text-yellow-400 mr-2">${String.fromCharCode(65 + j)})</span>
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <div id="paulista-feedback-${i}" class="hidden mt-4 p-4 rounded-xl"></div>
+        </div>
+      `).join('');
+      
+      container.innerHTML += `
+        <div class="text-center mt-6">
+          <button onclick="submitPaulistaQuiz()" id="submitPaulistaBtn" class="px-8 py-4 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-full font-bold text-xl hover:from-yellow-500 hover:to-orange-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            📝 Corrigir Prova
+          </button>
+        </div>
+      `;
+    }
+    
+    function selectPaulistaAnswer(questionIndex, optionIndex) {
+      if (paulistaSubmitted) return;
+      
+      paulistaAnswers[questionIndex] = optionIndex;
+      
+      document.querySelectorAll(`[data-pquestion="${questionIndex}"]`).forEach(btn => {
+        btn.classList.remove('selected', 'border-yellow-500');
+        btn.classList.add('border-slate-600');
+      });
+      
+      const selectedBtn = document.querySelector(`[data-pquestion="${questionIndex}"][data-poption="${optionIndex}"]`);
+      selectedBtn.classList.add('selected', 'border-yellow-500');
+      selectedBtn.classList.remove('border-slate-600');
+      
+      const allAnswered = paulistaQuestions.every((_, i) => paulistaAnswers[i] !== undefined);
+      document.getElementById('submitPaulistaBtn').disabled = !allAnswered;
+    }
+    
+    function submitPaulistaQuiz() {
+      if (paulistaSubmitted) return;
+      paulistaSubmitted = true;
+      
+      let correct = 0;
+      
+      paulistaQuestions.forEach((q, i) => {
+        const feedback = document.getElementById(`paulista-feedback-${i}`);
+        const isCorrect = paulistaAnswers[i] === q.correct;
+        
+        if (isCorrect) correct++;
+        
+        document.querySelectorAll(`[data-pquestion="${i}"]`).forEach(btn => {
+          const optIndex = parseInt(btn.dataset.poption);
+          btn.classList.remove('selected');
+          
+          if (optIndex === q.correct) {
+            btn.classList.add('correct');
+          } else if (optIndex === paulistaAnswers[i]) {
+            btn.classList.add('incorrect');
+          }
+          
+          btn.style.pointerEvents = 'none';
+        });
+        
+        feedback.classList.remove('hidden');
+        feedback.className = `mt-4 p-4 rounded-xl ${isCorrect ? 'bg-green-900/50 border border-green-500/50' : 'bg-red-900/50 border border-red-500/50'}`;
+        feedback.innerHTML = `
+          <p class="font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'} mb-2">
+            ${isCorrect ? '✅ Correto!' : '❌ Incorreto'}
+          </p>
+          <p class="text-gray-300 text-sm">${q.explanation}</p>
+        `;
+      });
+      
+      document.getElementById('submitPaulistaBtn').style.display = 'none';
+      
+      const results = document.getElementById('paulistaResults');
+      results.classList.remove('hidden');
+      
+      const percentage = (correct / paulistaQuestions.length) * 100;
+      
+      document.getElementById('paulistaResultsTitle').textContent = 
+        percentage >= 80 ? '🏆 Excelente! Você está pronto para a Prova Paulista!' : 
+        percentage >= 60 ? '📚 Bom desempenho! Revise os pontos que errou.' : 
+        '💪 Continue estudando! Reveja os conteúdos e tente novamente.';
+      
+      document.getElementById('paulistaResultsText').textContent = 
+        `Você acertou ${correct} de ${paulistaQuestions.length} questões (${percentage.toFixed(0)}%)`;
+    }
+    
+    function resetPaulistaQuiz() {
+      paulistaAnswers = [];
+      paulistaSubmitted = false;
+      document.getElementById('paulistaResults').classList.add('hidden');
+      renderPaulistaQuiz();
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+      renderPaulistaQuiz();
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d073f3765560e8a',t:'MTc3MTUxOTY1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
